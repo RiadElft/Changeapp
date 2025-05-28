@@ -19,6 +19,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { Merchant, AdminStats, Transaction, Customer } from '../types';
+import axios from 'axios';
 
 const AdminView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -105,12 +106,29 @@ const AdminView: React.FC = () => {
     }
   ]);
 
+  const [payoutRequests, setPayoutRequests] = useState<any[]>([]);
+  const [customerList, setCustomerList] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (activeTab === 'payouts') {
+      axios.get('http://localhost:4000/api/payout-requests')
+        .then(res => setPayoutRequests(res.data))
+        .catch(() => setPayoutRequests([]));
+    }
+    if (activeTab === 'customers') {
+      axios.get('http://localhost:4000/api/customers')
+        .then(res => setCustomerList(res.data))
+        .catch(() => setCustomerList([]));
+    }
+  }, [activeTab]);
+
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
     { id: 'merchants', label: 'Merchants', icon: Store },
     { id: 'transactions', label: 'Transactions', icon: CreditCard },
     { id: 'customers', label: 'Customers', icon: Users },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'payouts', label: 'Payout Requests', icon: DollarSign },
   ];
 
   const StatCard: React.FC<{ 
@@ -222,6 +240,18 @@ const AdminView: React.FC = () => {
       </td>
     </tr>
   );
+
+  const handleUpdatePayoutStatus = async (id: string, status: 'paid' | 'not_paid') => {
+    await axios.patch(`http://localhost:4000/api/payout-requests/${id}`, { status });
+    // Refresh list
+    const res = await axios.get('http://localhost:4000/api/payout-requests');
+    setPayoutRequests(res.data);
+  };
+
+  const handleDeleteCustomer = async (id: string) => {
+    await axios.delete(`http://localhost:4000/api/customers/${id}`);
+    setCustomerList((prev) => prev.filter((c) => c.id !== id));
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -413,24 +443,41 @@ const AdminView: React.FC = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Customer Management</h2>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                View Customer Details
-              </button>
             </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="text-center py-12">
-                <Users className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">Customer Management</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  View and manage customer data and balances
-                </p>
-                <div className="mt-6">
-                  <button className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                    View Customer List
-                  </button>
-                </div>
-              </div>
+            <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {customerList.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="text-center py-8 text-gray-400">No customers found</td>
+                    </tr>
+                  ) : (
+                    customerList.map((customer) => (
+                      <tr key={customer.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{customer.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{customer.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{customer.phone}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${customer.balance.toFixed(2)}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded"
+                            onClick={() => handleDeleteCustomer(customer.id)}
+                          >Delete</button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         );
@@ -487,6 +534,64 @@ const AdminView: React.FC = () => {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        );
+
+      case 'payouts':
+        return (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold mb-4">Payout Requests</h2>
+            <div className="bg-white rounded-lg shadow overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CCP</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card Info</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Merchant ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested At</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {payoutRequests.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="text-center py-8 text-gray-400">No payout requests</td>
+                    </tr>
+                  ) : (
+                    payoutRequests.map((req) => (
+                      <tr key={req.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.id}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.ccp}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.cardInfo}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.amount}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.merchantId || '-'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(req.createdAt).toLocaleString()}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {req.status === 'paid' && <span className="text-green-600 font-semibold">Paid</span>}
+                          {req.status === 'not_paid' && <span className="text-red-600 font-semibold">Not Paid</span>}
+                          {req.status === 'pending' && <span className="text-yellow-600 font-semibold">Pending</span>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <button
+                            className="bg-green-500 text-white px-3 py-1 rounded mr-2 disabled:opacity-50"
+                            disabled={req.status === 'paid'}
+                            onClick={() => handleUpdatePayoutStatus(req.id, 'paid')}
+                          >Mark as Paid</button>
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded disabled:opacity-50"
+                            disabled={req.status === 'not_paid'}
+                            onClick={() => handleUpdatePayoutStatus(req.id, 'not_paid')}
+                          >Mark as Not Paid</button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         );

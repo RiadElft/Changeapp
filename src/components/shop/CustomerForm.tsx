@@ -4,6 +4,7 @@ import Card, { CardHeader, CardBody } from '../common/Card';
 import Button from '../common/Button';
 import { ArrowLeft, UserPlus, User, Search } from 'lucide-react';
 import { Customer, Deposit } from '../../types';
+import axios from 'axios';
 
 interface CustomerFormProps {
   amount: number;
@@ -77,9 +78,9 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ amount, onBack }) => {
     setFormError('');
   };
 
-  const handleConfirmDeposit = () => {
+  const handleConfirmDeposit = async () => {
     if (!selectedCustomer || !currentTransaction) return;
-    
+
     const deposit: Deposit = {
       id: Date.now().toString(),
       customerId: selectedCustomer.id,
@@ -87,11 +88,16 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ amount, onBack }) => {
       timestamp: new Date(),
       transactionId: currentTransaction.id,
     };
-    
-    addDeposit(deposit);
-    updateCustomerBalance(selectedCustomer.id, amount);
-    updateTransactionStatus(currentTransaction.id, 'completed');
-    setIsSuccess(true);
+
+    try {
+      await axios.patch(`http://localhost:4000/api/customers/${selectedCustomer.id}/balance`, { amount });
+      addDeposit(deposit);
+      updateCustomerBalance(selectedCustomer.id, amount);
+      updateTransactionStatus(currentTransaction.id, 'completed');
+      setIsSuccess(true);
+    } catch (e) {
+      setFormError('Failed to update customer balance.');
+    }
   };
 
   if (isSuccess) {
