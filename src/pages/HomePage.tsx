@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../components/common/Button';
 import { useUser } from '../contexts/UserContext';
-import { ShoppingBag, User, ArrowRight, Wallet, PiggyBank, BarChart3, Coins, TrendingUp, Shield } from 'lucide-react';
+import { ShoppingBag, User, ArrowRight, Wallet, DollarSign, BarChart3, Coins, TrendingUp, Shield } from 'lucide-react';
 
 const HomePage: React.FC = () => {
   const { setUserType } = useUser();
@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
           <TrendingUp className="h-12 w-12 text-blue-300 animate-pulse" style={{ animationDelay: '1s', animationDuration: '4s' }} />
         </div>
         <div className="absolute bottom-40 left-20 opacity-10">
-          <PiggyBank className="h-20 w-20 text-green-300 animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }} />
+          <DollarSign className="h-20 w-20 text-green-300 animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }} />
         </div>
         <div className="absolute bottom-20 right-10 opacity-10">
           <Wallet className="h-14 w-14 text-blue-300 animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '3.5s' }} />
@@ -180,7 +180,7 @@ const HomePage: React.FC = () => {
               }}
             >
               <div className="inline-flex items-center justify-center bg-gradient-to-br from-green-500 to-green-600 rounded-full p-4 mb-5 shadow-lg">
-                <PiggyBank className="h-8 w-8 text-white" />
+                <DollarSign className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">
                 Save Automatically

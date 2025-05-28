@@ -160,13 +160,13 @@ const AdminView: React.FC = () => {
         </div>
         <div>
           <p className="text-sm text-gray-600">Total Change</p>
-          <p className="text-lg font-semibold">${merchant.totalChangeGenerated.toFixed(2)}</p>
+          <p className="text-lg font-semibold">{merchant.totalChangeGenerated.toFixed(2)} DA</p>
         </div>
       </div>
       
       <div className="flex justify-between items-center">
         <span className="text-sm text-gray-600">
-          Monthly Fee: ${merchant.monthlyFee.toFixed(2)}
+          Monthly Fee: {merchant.monthlyFee.toFixed(2)} DA
         </span>
         <div className="flex gap-2">
           <button className="p-2 text-blue-600 hover:bg-blue-50 rounded">
@@ -192,10 +192,10 @@ const AdminView: React.FC = () => {
         {transaction.merchantName}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        ${transaction.amount.toFixed(2)}
+        {transaction.amount.toFixed(2)} DA
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        ${transaction.change.toFixed(2)}
+        {transaction.change.toFixed(2)} DA
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {transaction.timestamp.toLocaleString()}
@@ -252,7 +252,7 @@ const AdminView: React.FC = () => {
               />
               <StatCard
                 title="Monthly Revenue"
-                value={`$${adminStats.monthlyRevenue.toFixed(2)}`}
+                value={`${adminStats.monthlyRevenue.toFixed(2)} DA`}
                 icon={DollarSign}
                 trend="+23% this month"
                 color="#F59E0B"
@@ -267,7 +267,7 @@ const AdminView: React.FC = () => {
                     <div key={transaction.id} className="flex justify-between items-center py-2 border-b">
                       <div>
                         <p className="font-medium">{transaction.merchantName}</p>
-                        <p className="text-sm text-gray-600">${transaction.change.toFixed(2)} change</p>
+                        <p className="text-sm text-gray-600">{transaction.change.toFixed(2)} DA change</p>
                       </div>
                       <span className={`px-2 py-1 rounded text-xs ${
                         transaction.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
@@ -288,7 +288,7 @@ const AdminView: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span>Total Change Amount</span>
-                    <span className="font-semibold">${adminStats.totalChangeAmount.toFixed(2)}</span>
+                    <span className="font-semibold">{adminStats.totalChangeAmount.toFixed(2)} DA</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Pending Transactions</span>
@@ -296,7 +296,7 @@ const AdminView: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span>Average Change Per Transaction</span>
-                    <span className="font-semibold">${(adminStats.totalChangeAmount / adminStats.totalTransactions).toFixed(2)}</span>
+                    <span className="font-semibold">{(adminStats.totalChangeAmount / adminStats.totalTransactions).toFixed(2)} DA</span>
                   </div>
                 </div>
               </div>
