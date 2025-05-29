@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TransactionDisplay from '../components/shop/TransactionDisplay';
 import ChangeOptions from '../components/shop/ChangeOptions';
 import { useTransaction } from '../contexts/TransactionContext';
-import { ShoppingBag, Coins, TrendingUp, Wallet } from 'lucide-react';
+import { ShoppingBag, Coins, TrendingUp, Wallet, CreditCard } from 'lucide-react';
 
 const ShopView: React.FC = () => {
   const { currentTransaction } = useTransaction();
+  const [activeTab, setActiveTab] = useState<'transactions'>('transactions');
 
   return (
     <div 
@@ -45,7 +46,7 @@ const ShopView: React.FC = () => {
               Manage transactions and help customers save their change with <span className="text-yellow-400 font-semibold">مودع</span>.
             </p>
           </div>
-          
+
           <div className="space-y-6">
             <div 
               className="rounded-2xl shadow-2xl border border-gray-700 overflow-hidden"
@@ -56,7 +57,6 @@ const ShopView: React.FC = () => {
             >
               <TransactionDisplay />
             </div>
-            
             {currentTransaction && (
               <div 
                 className="rounded-2xl shadow-2xl border border-gray-700 overflow-hidden"
