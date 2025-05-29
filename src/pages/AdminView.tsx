@@ -19,6 +19,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { Merchant, AdminStats, Transaction, Customer } from '../types';
+import { usePayoutRequests } from '../contexts/PayoutRequestContext';
 
 const AdminView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -105,13 +106,18 @@ const AdminView: React.FC = () => {
     }
   ]);
 
+  const { payoutRequests, updatePayoutStatus } = usePayoutRequests();
+
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
     { id: 'merchants', label: 'Merchants', icon: Store },
     { id: 'transactions', label: 'Transactions', icon: CreditCard },
     { id: 'customers', label: 'Customers', icon: Users },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'payouts', label: 'Payout Requests', icon: DollarSign },
   ];
+
+  const pendingPayoutCount = payoutRequests.filter(r => r.status === 'pending').length;
 
   const StatCard: React.FC<{ 
     title: string; 
@@ -491,6 +497,62 @@ const AdminView: React.FC = () => {
           </div>
         );
 
+      case 'payouts':
+        return (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold mb-4">Payout Requests</h2>
+            <div className="bg-white rounded-lg shadow overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CCP</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card Info</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested At</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {payoutRequests.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="text-center py-8 text-gray-400">No payout requests</td>
+                    </tr>
+                  ) : (
+                    payoutRequests.map((req) => (
+                      <tr key={req.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.id}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.ccp}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.cardInfo}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{req.amount}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(req.createdAt).toLocaleString()}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {req.status === 'paid' && <span className="text-green-600 font-semibold">Paid</span>}
+                          {req.status === 'not_paid' && <span className="text-red-600 font-semibold">Not Paid</span>}
+                          {req.status === 'pending' && <span className="text-yellow-600 font-semibold">Pending</span>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <button
+                            className="bg-green-500 text-white px-3 py-1 rounded mr-2 disabled:opacity-50"
+                            disabled={req.status === 'paid'}
+                            onClick={() => updatePayoutStatus(req.id, 'paid')}
+                          >Mark as Paid</button>
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded disabled:opacity-50"
+                            disabled={req.status === 'not_paid'}
+                            onClick={() => updatePayoutStatus(req.id, 'not_paid')}
+                          >Mark as Not Paid</button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -531,6 +593,11 @@ const AdminView: React.FC = () => {
                 >
                   <Icon className="w-5 h-5" />
                   {tab.label}
+                  {tab.id === 'payouts' && pendingPayoutCount > 0 && (
+                    <span className="ml-2 inline-block bg-yellow-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                      {pendingPayoutCount}
+                    </span>
+                  )}
                 </button>
               );
             })}
