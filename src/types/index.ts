@@ -47,7 +47,7 @@ export interface Deposit {
   transactionId: string;
 }
 
-export type ChangeOption = 'return' | 'donate' | 'deposit' | 'payout';
+export type ChangeOption = 'return' | 'donate' | 'deposit';
 
 export interface UserContextType {
   userType: 'shop' | 'customer' | 'admin' | null;

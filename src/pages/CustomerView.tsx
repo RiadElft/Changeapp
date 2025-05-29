@@ -6,7 +6,6 @@ import { useUser } from '../contexts/UserContext';
 import { useTransaction } from '../contexts/TransactionContext';
 import { User, Mail, Phone, UserCheck, Coins, PiggyBank, TrendingUp, Wallet } from 'lucide-react';
 import { Customer } from '../types';
-import axios from 'axios';
 
 const CustomerView: React.FC = () => {
   const { setCurrentCustomer } = useUser();
@@ -17,44 +16,49 @@ const CustomerView: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!email.trim()) {
       setError('Please enter your email address');
       return;
     }
-    try {
-      const res = await axios.get('http://localhost:4000/api/customers');
-      const customers = res.data;
-      const customer = customers.find((c: any) => c.email.toLowerCase() === email.toLowerCase());
-      if (customer) {
-        setCurrentCustomer(customer);
-      } else {
-        setError('No account found with this email. Please create a new account.');
-      }
-    } catch (e) {
-      setError('Failed to connect to server.');
+    
+    const customer = customers.find(c => c.email.toLowerCase() === email.toLowerCase());
+    
+    if (customer) {
+      setCurrentCustomer(customer);
+    } else {
+      setError('No account found with this email. Please create a new account.');
     }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = () => {
     if (!name.trim() || !email.trim() || !phone.trim()) {
       setError('All fields are required');
       return;
     }
+    
     if (!email.includes('@')) {
       setError('Please enter a valid email address');
       return;
     }
-    try {
-      const res = await axios.post('http://localhost:4000/api/customers', { name, email, phone });
-      setCurrentCustomer(res.data.customer);
-    } catch (e: any) {
-      if (e.response && e.response.status === 409) {
-        setError('An account with this email already exists');
-      } else {
-        setError('Failed to register.');
-      }
+    
+    const customerExists = customers.some(c => c.email.toLowerCase() === email.toLowerCase());
+    
+    if (customerExists) {
+      setError('An account with this email already exists');
+      return;
     }
+    
+    const newCustomer: Customer = {
+      id: Date.now().toString(),
+      name,
+      email,
+      phone,
+      balance: 0,
+    };
+    
+    addCustomer(newCustomer);
+    setCurrentCustomer(newCustomer);
   };
 
   const { currentCustomer } = useUser();
