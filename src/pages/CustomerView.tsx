@@ -99,7 +99,7 @@ const CustomerView: React.FC = () => {
                 Welcome, {currentCustomer.name}!
               </h1>
               <p className="text-xl text-gray-300 max-w-xl mx-auto">
-                View your saved change and track your deposits with <span className="text-blue-400 font-semibold">مودع</span>.
+                View your saved change and track your deposits with <span className="text-blue-400 font-semibold">Hassalapp</span>.
               </p>
             </div>
             
@@ -152,8 +152,8 @@ const CustomerView: React.FC = () => {
             <h1 className="text-4xl font-bold text-white mb-4">Customer Portal</h1>
             <p className="text-xl text-gray-300">
               {isRegistering 
-                ? `Create a new account to track your saved change with مودع` 
-                : `Sign in to view your saved change with مودع`}
+                ? `Create a new account to track your saved change with Hassalapp` 
+                : `Sign in to view your saved change with Hassalapp`}
             </p>
           </div>
           

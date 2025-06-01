@@ -10,11 +10,12 @@ const Footer: React.FC = () => {
       }}
     >
       <div className="container mx-auto px-4 text-center">
-        <p className="text-gray-400">© {new Date().getFullYear()} <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent font-semibold">مودع</span>. Tous droits réservés.</p>
+        <p className="text-gray-400">© {new Date().getFullYear()} <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent font-semibold">Hassalapp</span>. جميع الحقوق محفوظة.</p>
         <div className="mt-3 space-x-1">
-          <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-300 px-3 py-1 rounded-lg hover:bg-green-500/10 inline-block">Conditions</a>
-          <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors duration-300 px-3 py-1 rounded-lg hover:bg-blue-500/10 inline-block">Confidentialité</a>
-          <a href="#" className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 px-3 py-1 rounded-lg hover:bg-yellow-500/10 inline-block">Support</a>
+          <a href="#" className="text-gray-400 hover:text-green-400 transition-colors duration-300 px-3 py-1 rounded-lg hover:bg-green-500/10 inline-block">الشروط والأحكام</a>
+          <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors duration-300 px-3 py-1 rounded-lg hover:bg-blue-500/10 inline-block">الخصوصية</a>
+          <a href="#" className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 px-3 py-1 rounded-lg hover:bg-yellow-500/10 inline-block">الدعم</a>
+          <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors duration-300 px-3 py-1 rounded-lg hover:bg-purple-500/10 inline-block">تواصل معنا</a>
         </div>
       </div>
     </footer>

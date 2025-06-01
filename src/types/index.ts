@@ -23,7 +23,41 @@ export interface Merchant {
   phone: string;
   address: string;
   registrationDate: Date;
-  status: 'active' | 'suspended' | 'pending';
+  status: 'pending' | 'approved' | 'rejected' | 'suspended';
+  totalTransactions: number;
+  totalChangeGenerated: number;
+  monthlyFee: number;
+  businessType: string;
+  businessLicense?: string;
+  // Authentication fields
+  password?: string;
+  lastLogin?: Date;
+}
+
+export interface MerchantSignupData {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  businessType: string;
+  businessLicense?: string;
+  password: string;
+}
+
+export interface MerchantLoginData {
+  email: string;
+  password: string;
+}
+
+export interface AuthenticatedMerchant {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  businessType: string;
+  status: 'pending' | 'approved' | 'rejected' | 'suspended';
+  registrationDate: Date;
   totalTransactions: number;
   totalChangeGenerated: number;
   monthlyFee: number;
@@ -54,6 +88,11 @@ export interface UserContextType {
   setUserType: (type: 'shop' | 'customer' | 'admin' | null) => void;
   currentCustomer: Customer | null;
   setCurrentCustomer: (customer: Customer | null) => void;
+  // Merchant authentication states
+  currentMerchant: AuthenticatedMerchant | null;
+  setCurrentMerchant: (merchant: AuthenticatedMerchant | null) => void;
+  merchantAuthState: 'login' | 'signup' | 'authenticated' | 'pending_approval' | null;
+  setMerchantAuthState: (state: 'login' | 'signup' | 'authenticated' | 'pending_approval' | null) => void;
 }
 
 export interface TransactionContextType {

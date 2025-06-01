@@ -16,65 +16,32 @@ import {
   Download,
   Filter,
   Search,
-  Calendar
+  Calendar,
+  UserCheck,
+  UserX
 } from 'lucide-react';
 import { Merchant, AdminStats, Transaction, Customer } from '../types';
 import { usePayoutRequests } from '../contexts/PayoutRequestContext';
+import { useMerchantAuth } from '../contexts/MerchantAuthContext';
 
 const AdminView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   
+  const { merchants, updateMerchantStatus, getPendingMerchants } = useMerchantAuth();
+  const pendingMerchants = getPendingMerchants();
+  
   // Mock data - in a real app, this would come from your backend
   const [adminStats] = useState<AdminStats>({
-    totalMerchants: 145,
-    activeMerchants: 132,
+    totalMerchants: merchants.length,
+    activeMerchants: merchants.filter(m => m.status === 'approved').length,
     totalCustomers: 2847,
     totalTransactions: 15432,
     totalChangeAmount: 12847.50,
     monthlyRevenue: 2156.75,
     pendingTransactions: 23
   });
-
-  const [merchants] = useState<Merchant[]>([
-    {
-      id: '1',
-      name: 'QuickMart Grocery',
-      email: 'info@quickmart.com',
-      phone: '+1-555-0123',
-      address: '123 Main Street, Downtown',
-      registrationDate: new Date('2024-01-15'),
-      status: 'active',
-      totalTransactions: 245,
-      totalChangeGenerated: 1250.75,
-      monthlyFee: 25.00
-    },
-    {
-      id: '2',
-      name: 'TechZone Electronics',
-      email: 'contact@techzone.com',
-      phone: '+1-555-0456',
-      address: '456 Tech Plaza, Business District',
-      registrationDate: new Date('2024-02-01'),
-      status: 'active',
-      totalTransactions: 1890,
-      totalChangeGenerated: 8975.25,
-      monthlyFee: 125.00
-    },
-    {
-      id: '3',
-      name: 'Fresh Fitness Center',
-      email: 'admin@freshfitness.com',
-      phone: '+1-555-0789',
-      address: '789 Health Avenue, Wellness District',
-      registrationDate: new Date('2024-01-28'),
-      status: 'pending',
-      totalTransactions: 0,
-      totalChangeGenerated: 0,
-      monthlyFee: 0
-    }
-  ]);
 
   const [recentTransactions] = useState<Transaction[]>([
     {
@@ -111,6 +78,7 @@ const AdminView: React.FC = () => {
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
     { id: 'merchants', label: 'Merchants', icon: Store },
+    { id: 'merchant-approvals', label: 'Merchant Approvals', icon: UserCheck, badge: pendingMerchants.length },
     { id: 'transactions', label: 'Transactions', icon: CreditCard },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings },
@@ -118,6 +86,18 @@ const AdminView: React.FC = () => {
   ];
 
   const pendingPayoutCount = payoutRequests.filter(r => r.status === 'pending').length;
+
+  const handleApproveMerchant = (merchantId: string) => {
+    updateMerchantStatus(merchantId, 'approved');
+  };
+
+  const handleRejectMerchant = (merchantId: string) => {
+    updateMerchantStatus(merchantId, 'rejected');
+  };
+
+  const handleSuspendMerchant = (merchantId: string) => {
+    updateMerchantStatus(merchantId, 'suspended');
+  };
 
   const StatCard: React.FC<{ 
     title: string; 
@@ -140,22 +120,31 @@ const AdminView: React.FC = () => {
     </div>
   );
 
-  const MerchantCard: React.FC<{ merchant: Merchant }> = ({ merchant }) => (
+  const MerchantCard: React.FC<{ merchant: Merchant; showActions?: boolean }> = ({ merchant, showActions = true }) => (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">{merchant.name}</h3>
           <p className="text-gray-600">{merchant.email}</p>
           <p className="text-gray-600">{merchant.phone}</p>
+          <p className="text-gray-600 text-sm mt-1">{merchant.address}</p>
+          <p className="text-gray-600 text-sm">Business Type: {merchant.businessType}</p>
+          {merchant.businessLicense && (
+            <p className="text-gray-600 text-sm">License: {merchant.businessLicense}</p>
+          )}
         </div>
         <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-          merchant.status === 'active' 
+          merchant.status === 'approved' 
             ? 'bg-green-100 text-green-800' 
             : merchant.status === 'pending'
             ? 'bg-yellow-100 text-yellow-800'
-            : 'bg-red-100 text-red-800'
+            : merchant.status === 'rejected'
+            ? 'bg-red-100 text-red-800'
+            : 'bg-gray-100 text-gray-800'
         }`}>
-          {merchant.status === 'active' ? 'Active' : merchant.status === 'pending' ? 'Pending' : 'Suspended'}
+          {merchant.status === 'approved' ? 'Approved' : 
+           merchant.status === 'pending' ? 'Pending' : 
+           merchant.status === 'rejected' ? 'Rejected' : 'Suspended'}
         </span>
       </div>
       
@@ -172,19 +161,42 @@ const AdminView: React.FC = () => {
       
       <div className="flex justify-between items-center">
         <span className="text-sm text-gray-600">
-          Monthly Fee: {merchant.monthlyFee.toFixed(2)} DA
+          Registered: {merchant.registrationDate.toLocaleDateString()}
         </span>
-        <div className="flex gap-2">
-          <button className="p-2 text-blue-600 hover:bg-blue-50 rounded">
-            <Eye className="w-4 h-4" />
-          </button>
-          <button className="p-2 text-green-600 hover:bg-green-50 rounded">
-            <Edit className="w-4 h-4" />
-          </button>
-          <button className="p-2 text-red-600 hover:bg-red-50 rounded">
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
+        {showActions && (
+          <div className="flex gap-2">
+            <button className="p-2 text-blue-600 hover:bg-blue-50 rounded">
+              <Eye className="w-4 h-4" />
+            </button>
+            {merchant.status === 'pending' && (
+              <>
+                <button 
+                  onClick={() => handleApproveMerchant(merchant.id)}
+                  className="p-2 text-green-600 hover:bg-green-50 rounded"
+                  title="Approve"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => handleRejectMerchant(merchant.id)}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded"
+                  title="Reject"
+                >
+                  <XCircle className="w-4 h-4" />
+                </button>
+              </>
+            )}
+            {merchant.status === 'approved' && (
+              <button 
+                onClick={() => handleSuspendMerchant(merchant.id)}
+                className="p-2 text-orange-600 hover:bg-orange-50 rounded"
+                title="Suspend"
+              >
+                <UserX className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -340,8 +352,9 @@ const AdminView: React.FC = () => {
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
                   <option value="all">All Status</option>
-                  <option value="active">Active</option>
+                  <option value="approved">Approved</option>
                   <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
                   <option value="suspended">Suspended</option>
                 </select>
               </div>
@@ -357,6 +370,112 @@ const AdminView: React.FC = () => {
                   ))}
               </div>
             </div>
+          </div>
+        );
+
+      case 'merchant-approvals':
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Merchant Approvals</h2>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">
+                  {pendingMerchants.length} pending applications
+                </span>
+                <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                  {pendingMerchants.length} Pending
+                </span>
+              </div>
+            </div>
+
+            {pendingMerchants.length === 0 ? (
+              <div className="bg-white rounded-lg shadow p-8">
+                <div className="text-center py-12">
+                  <UserCheck className="mx-auto h-12 w-12 text-gray-400" />
+                  <h3 className="mt-2 text-lg font-medium text-gray-900">No Pending Applications</h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    All merchant applications have been reviewed.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-yellow-400 mr-2" />
+                    <h3 className="text-sm font-medium text-yellow-800">
+                      Review Required
+                    </h3>
+                  </div>
+                  <p className="mt-1 text-sm text-yellow-700">
+                    The following merchant applications are awaiting your review. Please verify business information before approving.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {pendingMerchants.map((merchant) => (
+                    <div key={merchant.id} className="bg-white rounded-lg shadow-lg p-6 border-2 border-yellow-200">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex-1">
+                          <h3 className="text-xl font-semibold text-gray-900">{merchant.name}</h3>
+                          <p className="text-gray-600 text-sm mt-1">{merchant.businessType}</p>
+                        </div>
+                        <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                          Pending Review
+                        </span>
+                      </div>
+
+                      <div className="space-y-3 mb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <p className="text-sm font-medium text-gray-700">Email</p>
+                            <p className="text-sm text-gray-600">{merchant.email}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-700">Phone</p>
+                            <p className="text-sm text-gray-600">{merchant.phone}</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p className="text-sm font-medium text-gray-700">Business Address</p>
+                          <p className="text-sm text-gray-600">{merchant.address}</p>
+                        </div>
+
+                        {merchant.businessLicense && (
+                          <div>
+                            <p className="text-sm font-medium text-gray-700">Business License</p>
+                            <p className="text-sm text-gray-600">{merchant.businessLicense}</p>
+                          </div>
+                        )}
+
+                        <div>
+                          <p className="text-sm font-medium text-gray-700">Registration Date</p>
+                          <p className="text-sm text-gray-600">{merchant.registrationDate.toLocaleDateString()}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => handleApproveMerchant(merchant.id)}
+                          className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleRejectMerchant(merchant.id)}
+                          className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         );
 
@@ -564,7 +683,7 @@ const AdminView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">مودع Admin Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Hassalapp Admin Dashboard</h1>
               <p className="text-gray-600">Comprehensive management for the change aggregation system</p>
             </div>
             <div className="flex items-center gap-4">
@@ -596,6 +715,11 @@ const AdminView: React.FC = () => {
                   {tab.id === 'payouts' && pendingPayoutCount > 0 && (
                     <span className="ml-2 inline-block bg-yellow-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                       {pendingPayoutCount}
+                    </span>
+                  )}
+                  {tab.id === 'merchant-approvals' && pendingMerchants.length > 0 && (
+                    <span className="ml-2 inline-block bg-yellow-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                      {pendingMerchants.length}
                     </span>
                   )}
                 </button>

@@ -43,7 +43,7 @@ const ShopView: React.FC = () => {
               Merchant Dashboard
             </h1>
             <p className="text-xl text-gray-300 max-w-xl mx-auto">
-              Manage transactions and help customers save their change with <span className="text-yellow-400 font-semibold">مودع</span>.
+              Manage transactions and help customers save their change with <span className="text-yellow-400 font-semibold">Hassalapp</span>.
             </p>
           </div>
 
