@@ -1,6 +1,7 @@
 import React from 'react';
 import { Coins, ShoppingBag, LogOut, ArrowRight } from 'lucide-react';
 import { useUser } from '../../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const { 
@@ -11,6 +12,7 @@ const Header: React.FC = () => {
     currentMerchant, 
     setCurrentMerchant 
   } = useUser();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     setUserType(null);
@@ -49,7 +51,7 @@ const Header: React.FC = () => {
           className="flex items-center space-x-2 cursor-pointer transition-all duration-300 hover:scale-105"
           onClick={handleLogoClick}
         >
-          <img src="wallet.png" alt="Hassalapp" className="h-8 w-8" />
+          <img src="/wallet.png" alt="Hassalapp" className="h-8 w-8" />
           <h1 className="text-xl font-bold text-white">Hassalapp</h1>
         </div>
         
@@ -87,6 +89,11 @@ const Header: React.FC = () => {
             {userType === null && (
               <button 
                 className="flex items-center space-x-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 text-white px-6 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-white/25 border border-white/20"
+                onClick={() => {
+                  setUserType('shop');
+                  setMerchantAuthState('signup');
+                  navigate('/shop');
+                }}
               >
                 <span className="font-medium">ابدأ الآن</span>
                 <ArrowRight size={16} className="animate-pulse" />

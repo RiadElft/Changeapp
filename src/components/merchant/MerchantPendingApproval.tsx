@@ -29,64 +29,64 @@ const MerchantPendingApproval: React.FC = () => {
             <Clock className="h-12 w-12 text-white" />
           </div>
           
-          <h2 className="text-3xl font-bold text-white mb-4">Application Under Review</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">طلبك قيد المراجعة</h2>
           
           <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-6 mb-8">
             <AlertCircle className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
             <p className="text-yellow-200 text-lg mb-2">
-              Your merchant application has been submitted successfully!
+              تم إرسال طلب تسجيلك كتاجر بنجاح!
             </p>
             <p className="text-yellow-100">
-              Our team is currently reviewing your application. You'll receive an email notification once your account has been approved.
+              فريقنا يقوم حالياً بمراجعة طلبك. ستتلقى إشعاراً عبر البريد الإلكتروني بمجرد الموافقة على حسابك.
             </p>
           </div>
 
-          <div className="text-left mb-8">
-            <h3 className="text-xl font-semibold text-white mb-4">What happens next?</h3>
+          <div className="text-right mb-8" dir="rtl">
+            <h3 className="text-xl font-semibold text-white mb-4">ماذا سيحدث بعد ذلك؟</h3>
             
             <div className="space-y-4">
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-3 flex-row-reverse">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-bold">1</span>
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-white font-medium">Application Review</h4>
-                  <p className="text-gray-300 text-sm">Our team will verify your business information and documentation.</p>
+                  <h4 className="text-white font-medium">مراجعة الطلب</h4>
+                  <p className="text-gray-300 text-sm">سيقوم فريقنا بالتحقق من معلومات نشاطك التجاري والمستندات المقدمة.</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-3 flex-row-reverse">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-bold">2</span>
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-white font-medium">Approval Notification</h4>
-                  <p className="text-gray-300 text-sm">You'll receive an email once your application is approved or if we need additional information.</p>
+                  <h4 className="text-white font-medium">إشعار الموافقة</h4>
+                  <p className="text-gray-300 text-sm">ستتلقى بريداً إلكترونياً عند الموافقة على طلبك أو إذا احتجنا إلى معلومات إضافية.</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-3 flex-row-reverse">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                     <CheckCircle2 className="h-4 w-4 text-white" />
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-white font-medium">Access Dashboard</h4>
-                  <p className="text-gray-300 text-sm">Once approved, you can log in and start using the merchant dashboard.</p>
+                  <h4 className="text-white font-medium">الوصول إلى لوحة التحكم</h4>
+                  <p className="text-gray-300 text-sm">بعد الموافقة، يمكنك تسجيل الدخول والبدء في استخدام لوحة تحكم التاجر.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-gray-600 pt-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Review Timeline</h3>
+          <div className="border-t border-gray-600 pt-6" dir="rtl">
+            <h3 className="text-lg font-semibold text-white mb-4">مدة المراجعة</h3>
             <p className="text-gray-300 mb-6">
-              Applications are typically reviewed within <span className="text-yellow-400 font-semibold">24-48 hours</span> during business days.
+              عادةً ما تتم مراجعة الطلبات خلال <span className="text-yellow-400 font-semibold">24-48 ساعة</span> في أيام العمل.
             </p>
             
             <div className="space-y-3">
@@ -94,7 +94,7 @@ const MerchantPendingApproval: React.FC = () => {
                 onClick={handleBackToLogin}
                 className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-3 rounded-lg transition-all duration-300"
               >
-                Back to Login
+                العودة لتسجيل الدخول
               </Button>
               
               <Button
@@ -102,14 +102,14 @@ const MerchantPendingApproval: React.FC = () => {
                 variant="secondary"
                 className="w-full bg-gray-600 hover:bg-gray-500 text-white font-semibold py-3 rounded-lg transition-all duration-300"
               >
-                Back to Home
+                العودة إلى الصفحة الرئيسية
               </Button>
             </div>
           </div>
 
           <div className="mt-8 text-center">
             <p className="text-gray-400 text-sm">
-              Need help? Contact support at{' '}
+              تحتاج للمساعدة؟ تواصل مع الدعم عبر البريد الإلكتروني{' '}
               <a href="mailto:support@modaa.com" className="text-yellow-400 hover:text-yellow-300">
                 support@modaa.com
               </a>

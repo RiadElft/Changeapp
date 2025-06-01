@@ -51,7 +51,7 @@ const TransactionDisplay: React.FC = () => {
       <CardHeader className="bg-blue-600 text-white">
         <h2 className="text-xl font-semibold flex items-center">
           <DollarSign className="mr-2" />
-          Transaction Calculator
+          حاسبة المعاملات
         </h2>
       </CardHeader>
       
@@ -59,8 +59,8 @@ const TransactionDisplay: React.FC = () => {
         {!currentTransaction ? (
           <div className="space-y-4">
             <div>
-              <label htmlFor="amount\" className="block text-sm font-medium text-gray-700 mb-1">
-                Transaction Amount ($)
+              <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+                مبلغ المعاملة (دج)
               </label>
               <input
                 id="amount"
@@ -76,7 +76,7 @@ const TransactionDisplay: React.FC = () => {
             
             <div>
               <label htmlFor="paid" className="block text-sm font-medium text-gray-700 mb-1">
-                Amount Paid ($)
+                المبلغ المدفوع (دج)
               </label>
               <input
                 id="paid"
@@ -91,24 +91,26 @@ const TransactionDisplay: React.FC = () => {
             </div>
             
             {error && (
-              <p className="text-red-600 text-sm">{error}</p>
+              <p className="text-red-600 text-sm">{error === 'Please enter valid numbers' ? 'الرجاء إدخال أرقام صحيحة' : 
+                error === 'Paid amount must be greater than or equal to the transaction amount' ? 
+                'يجب أن يكون المبلغ المدفوع أكبر من أو يساوي مبلغ المعاملة' : error}</p>
             )}
           </div>
         ) : (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Transaction Amount:</span>
-              <span className="font-medium">${currentTransaction.amount.toFixed(2)}</span>
+              <span className="text-gray-600">مبلغ المعاملة:</span>
+              <span className="font-medium">{currentTransaction.amount.toFixed(2)} دج</span>
             </div>
             
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Amount Paid:</span>
-              <span className="font-medium">${(currentTransaction.amount + currentTransaction.change).toFixed(2)}</span>
+              <span className="text-gray-600">المبلغ المدفوع:</span>
+              <span className="font-medium">{(currentTransaction.amount + currentTransaction.change).toFixed(2)} دج</span>
             </div>
             
             <div className="flex justify-between items-center py-2 px-4 bg-yellow-100 rounded-md border border-yellow-400">
-              <span className="font-medium text-yellow-800">Change Due:</span>
-              <span className="font-bold text-yellow-800">${currentTransaction.change.toFixed(2)}</span>
+              <span className="font-medium text-yellow-800">الفكة المستحقة:</span>
+              <span className="font-bold text-yellow-800">{currentTransaction.change.toFixed(2)} دج</span>
             </div>
           </div>
         )}
@@ -121,14 +123,14 @@ const TransactionDisplay: React.FC = () => {
             className="flex items-center"
           >
             <Calculator size={18} className="mr-2" />
-            Calculate Change
+            حساب الفكة
           </Button>
         ) : (
           <Button 
             variant="outline" 
             onClick={resetTransaction}
           >
-            New Transaction
+            معاملة جديدة
           </Button>
         )}
       </CardFooter>

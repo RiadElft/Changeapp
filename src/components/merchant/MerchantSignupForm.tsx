@@ -25,16 +25,16 @@ const MerchantSignupForm: React.FC = () => {
   const [errors, setErrors] = useState<Partial<MerchantSignupData>>({});
 
   const businessTypes = [
-    'Restaurant',
-    'Retail Store',
-    'Cafe',
-    'Grocery Store',
-    'Gas Station',
-    'Pharmacy',
-    'Bakery',
-    'Electronics Store',
-    'Clothing Store',
-    'Other'
+    { value: 'Restaurant', label: 'مطعم' },
+    { value: 'Retail Store', label: 'محل تجزئة' },
+    { value: 'Cafe', label: 'مقهى' },
+    { value: 'Grocery Store', label: 'بقالة' },
+    { value: 'Gas Station', label: 'محطة وقود' },
+    { value: 'Pharmacy', label: 'صيدلية' },
+    { value: 'Bakery', label: 'مخبز' },
+    { value: 'Electronics Store', label: 'محل إلكترونيات' },
+    { value: 'Clothing Store', label: 'محل ملابس' },
+    { value: 'Other', label: 'أخرى' }
   ];
 
   const validateForm = (): boolean => {
@@ -120,8 +120,8 @@ const MerchantSignupForm: React.FC = () => {
             <div className="inline-flex items-center justify-center bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full p-4 mb-4 shadow-lg">
               <ShoppingBag className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Merchant Registration</h2>
-            <p className="text-gray-300">Join Hassalapp as a merchant partner</p>
+            <h2 className="text-3xl font-bold text-white mb-2">تسجيل تاجر جديد</h2>
+            <p className="text-gray-300">انضم الينا كشريك تاجر</p>
           </div>
 
           {message && (
@@ -138,7 +138,7 @@ const MerchantSignupForm: React.FC = () => {
             {/* Business Name */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Business Name *
+                اسم النشاط *
               </label>
               <div className="relative">
                 <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -150,7 +150,7 @@ const MerchantSignupForm: React.FC = () => {
                   className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
                     errors.name ? 'border-red-500' : 'border-gray-600'
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400`}
-                  placeholder="Enter your business name"
+                  placeholder="ادخل اسم النشاط"
                 />
               </div>
               {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name}</p>}
@@ -159,7 +159,7 @@ const MerchantSignupForm: React.FC = () => {
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address *
+                البريد الإلكتروني *
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -171,7 +171,7 @@ const MerchantSignupForm: React.FC = () => {
                   className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
                     errors.email ? 'border-red-500' : 'border-gray-600'
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400`}
-                  placeholder="Enter your email address"
+                  placeholder="ادخل البريد الإلكتروني"
                 />
               </div>
               {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
@@ -180,19 +180,19 @@ const MerchantSignupForm: React.FC = () => {
             {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Phone Number *
+                رقم الهاتف *
               </label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
-                  type="tel"
+                  type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
                   className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
                     errors.phone ? 'border-red-500' : 'border-gray-600'
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400`}
-                  placeholder="Enter your phone number"
+                  placeholder="ادخل رقم الهاتف"
                 />
               </div>
               {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
@@ -201,19 +201,19 @@ const MerchantSignupForm: React.FC = () => {
             {/* Address */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Business Address *
+                العنوان *
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <textarea
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  rows={3}
                   className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
                     errors.address ? 'border-red-500' : 'border-gray-600'
-                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400 resize-none`}
-                  placeholder="Enter your business address"
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400`}
+                  placeholder="ادخل العنوان الكامل"
                 />
               </div>
               {errors.address && <p className="mt-1 text-sm text-red-400">{errors.address}</p>}
@@ -222,7 +222,7 @@ const MerchantSignupForm: React.FC = () => {
             {/* Business Type */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Business Type *
+                نوع النشاط *
               </label>
               <select
                 name="businessType"
@@ -232,10 +232,10 @@ const MerchantSignupForm: React.FC = () => {
                   errors.businessType ? 'border-red-500' : 'border-gray-600'
                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white`}
               >
-                <option value="">Select business type</option>
+                <option value="">اختر نوع النشاط</option>
                 {businessTypes.map(type => (
-                  <option key={type} value={type} className="bg-gray-800 text-white">
-                    {type}
+                  <option key={type.value} value={type.value} className="bg-gray-800 text-white">
+                    {type.label}
                   </option>
                 ))}
               </select>
@@ -245,7 +245,7 @@ const MerchantSignupForm: React.FC = () => {
             {/* Business License (Optional) */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Business License Number (Optional)
+                رقم رخصة النشاط (اختياري)
               </label>
               <div className="relative">
                 <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -255,7 +255,7 @@ const MerchantSignupForm: React.FC = () => {
                   value={formData.businessLicense}
                   onChange={handleInputChange}
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400"
-                  placeholder="Enter your business license number"
+                  placeholder="ادخل رقم الرخصة إن وجد"
                 />
               </div>
             </div>
@@ -263,7 +263,7 @@ const MerchantSignupForm: React.FC = () => {
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Password *
+                كلمة المرور *
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -275,7 +275,7 @@ const MerchantSignupForm: React.FC = () => {
                   className={`w-full pl-10 pr-12 py-3 bg-white/10 border ${
                     errors.password ? 'border-red-500' : 'border-gray-600'
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400`}
-                  placeholder="Create a password"
+                  placeholder="أنشئ كلمة مرور"
                 />
                 <button
                   type="button"
@@ -294,22 +294,20 @@ const MerchantSignupForm: React.FC = () => {
               disabled={loading}
               className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating Account...' : 'Create Merchant Account'}
+              {loading ? 'جاري إنشاء الحساب...' : 'إنشاء حساب تاجر'}
             </Button>
 
             {/* Login Link */}
-            <div className="text-center">
-              <p className="text-gray-300">
-                Already have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => setMerchantAuthState('login')}
-                  className="text-yellow-400 hover:text-yellow-300 font-medium"
-                >
-                  Login here
-                </button>
-              </p>
-            </div>
+            <p className="text-gray-300">
+              لديك حساب بالفعل؟{' '}
+              <button
+                type="button"
+                onClick={() => setMerchantAuthState('login')}
+                className="text-yellow-400 hover:text-yellow-300 font-medium"
+              >
+                تسجيل الدخول
+              </button>
+            </p>
           </form>
         </div>
       </div>

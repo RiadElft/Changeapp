@@ -32,46 +32,19 @@ const AdminView: React.FC = () => {
   const { merchants, updateMerchantStatus, getPendingMerchants } = useMerchantAuth();
   const pendingMerchants = getPendingMerchants();
   
-  // Mock data - in a real app, this would come from your backend
-  const [adminStats] = useState<AdminStats>({
+  // Remove mock data - use real data only
+  const adminStats: AdminStats = {
     totalMerchants: merchants.length,
     activeMerchants: merchants.filter(m => m.status === 'approved').length,
-    totalCustomers: 2847,
-    totalTransactions: 15432,
-    totalChangeAmount: 12847.50,
-    monthlyRevenue: 2156.75,
-    pendingTransactions: 23
-  });
+    totalCustomers: 0, // Replace with real customer count if available
+    totalTransactions: 0, // Replace with real transaction count if available
+    totalChangeAmount: 0, // Replace with real change amount if available
+    monthlyRevenue: 0, // Replace with real revenue if available
+    pendingTransactions: 0 // Replace with real pending transactions if available
+  };
 
-  const [recentTransactions] = useState<Transaction[]>([
-    {
-      id: '1',
-      amount: 125.75,
-      change: 4.25,
-      timestamp: new Date(),
-      status: 'completed',
-      merchantId: '1',
-      merchantName: 'QuickMart Grocery'
-    },
-    {
-      id: '2',
-      amount: 89.50,
-      change: 10.50,
-      timestamp: new Date(Date.now() - 3600000),
-      status: 'pending',
-      merchantId: '2',
-      merchantName: 'TechZone Electronics'
-    },
-    {
-      id: '3',
-      amount: 234.00,
-      change: 6.00,
-      timestamp: new Date(Date.now() - 7200000),
-      status: 'completed',
-      merchantId: '1',
-      merchantName: 'QuickMart Grocery'
-    }
-  ]);
+  // Remove mock recentTransactions - use real transactions if available
+  const recentTransactions: Transaction[] = [];
 
   const { payoutRequests, updatePayoutStatus } = usePayoutRequests();
 
@@ -679,7 +652,7 @@ const AdminView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">لوحة تحكم حصّال آب للمشرف</h1>
+              <h1 className="text-3xl font-bold text-gray-900">لوحة تحكم المشرف</h1>
               <p className="text-gray-600">إدارة شاملة لنظام تجميع الفكة</p>
             </div>
             <div className="flex items-center gap-4">

@@ -87,8 +87,8 @@ const MerchantLoginForm: React.FC = () => {
             <div className="inline-flex items-center justify-center bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full p-4 mb-4 shadow-lg">
               <ShoppingBag className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Merchant Login</h2>
-            <p className="text-gray-300">Access your Hassalapp merchant dashboard</p>
+            <h2 className="text-3xl font-bold text-white mb-2">تسجيل دخول التاجر</h2>
+            <p className="text-gray-300">ادخل الى لوحة تحكم التاجر</p>
           </div>
 
           {message && (
@@ -105,7 +105,7 @@ const MerchantLoginForm: React.FC = () => {
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
+                البريد الإلكتروني
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -117,7 +117,7 @@ const MerchantLoginForm: React.FC = () => {
                   className={`w-full pl-10 pr-4 py-3 bg-white/10 border ${
                     errors.email ? 'border-red-500' : 'border-gray-600'
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400`}
-                  placeholder="Enter your email address"
+                  placeholder="ادخل البريد الإلكتروني"
                 />
               </div>
               {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
@@ -126,7 +126,7 @@ const MerchantLoginForm: React.FC = () => {
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Password
+                كلمة المرور
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -138,7 +138,7 @@ const MerchantLoginForm: React.FC = () => {
                   className={`w-full pl-10 pr-12 py-3 bg-white/10 border ${
                     errors.password ? 'border-red-500' : 'border-gray-600'
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400`}
-                  placeholder="Enter your password"
+                  placeholder="ادخل كلمة المرور"
                 />
                 <button
                   type="button"
@@ -157,28 +157,19 @@ const MerchantLoginForm: React.FC = () => {
               disabled={loading}
               className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
             </Button>
-
-            {/* Demo Credentials */}
-            <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
-              <h4 className="text-blue-300 font-medium mb-2">Demo Credentials:</h4>
-              <p className="text-blue-200 text-sm">
-                Email: coffee@example.com<br />
-                Password: password123
-              </p>
-            </div>
 
             {/* Signup Link */}
             <div className="text-center">
               <p className="text-gray-300">
-                Don't have a merchant account?{' '}
+                ليس لديك حساب تاجر؟{' '}
                 <button
                   type="button"
                   onClick={() => setMerchantAuthState('signup')}
                   className="text-yellow-400 hover:text-yellow-300 font-medium"
                 >
-                  Register here
+                  سجل هنا
                 </button>
               </p>
             </div>

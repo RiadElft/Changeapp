@@ -40,10 +40,10 @@ const ShopView: React.FC = () => {
               <ShoppingBag className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-white mb-4">
-              Merchant Dashboard
+              لوحة تحكم التاجر
             </h1>
             <p className="text-xl text-gray-300 max-w-xl mx-auto">
-              Manage transactions and help customers save their change with <span className="text-yellow-400 font-semibold">Hassalapp</span>.
+              إدارة المعاملات ومساعدة العملاء على توفير الفكة باستخدام <span className="text-yellow-400 font-semibold">Hassalapp</span>.
             </p>
           </div>
 

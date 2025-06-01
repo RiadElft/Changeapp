@@ -13,25 +13,7 @@ interface MerchantAuthContextType {
 const MerchantAuthContext = createContext<MerchantAuthContextType | undefined>(undefined);
 
 export const MerchantAuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [merchants, setMerchants] = useState<Merchant[]>([
-    // Sample approved merchant for testing
-    {
-      id: 'merchant-1',
-      name: 'Sample Coffee Shop',
-      email: 'coffee@example.com',
-      phone: '+1234567890',
-      address: '123 Coffee Street',
-      businessType: 'Restaurant',
-      businessLicense: 'LIC123456',
-      registrationDate: new Date('2024-01-15'),
-      status: 'approved',
-      totalTransactions: 150,
-      totalChangeGenerated: 245.75,
-      monthlyFee: 25.00,
-      password: 'password123', // In real app, this should be hashed
-      lastLogin: new Date('2024-01-20')
-    }
-  ]);
+  const [merchants, setMerchants] = useState<Merchant[]>([]);
 
   const signupMerchant = async (data: MerchantSignupData): Promise<{ success: boolean; message: string; merchantId?: string }> => {
     try {
